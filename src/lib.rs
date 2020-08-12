@@ -109,7 +109,7 @@ pub use actix_http::{body, cookie, http, Error, HttpMessage, ResponseError, Resu
 
 pub use crate::app::App;
 pub use crate::extract::FromRequest;
-pub use crate::request::HttpRequest;
+pub use crate::request::{HttpRequest, HttpRequestPool};
 pub use crate::resource::Resource;
 pub use crate::responder::{Either, Responder};
 pub use crate::route::Route;

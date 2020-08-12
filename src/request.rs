@@ -15,21 +15,21 @@ use crate::rmap::ResourceMap;
 
 #[derive(Clone)]
 /// An HTTP Request
-pub struct HttpRequest(pub(crate) Rc<HttpRequestInner>);
+pub struct HttpRequest(pub Rc<HttpRequestInner>);
 
-pub(crate) struct HttpRequestInner {
-    pub(crate) head: Message<RequestHead>,
-    pub(crate) path: Path<Url>,
-    pub(crate) payload: Payload,
-    pub(crate) app_data: Rc<Extensions>,
-    rmap: Rc<ResourceMap>,
-    config: AppConfig,
-    pool: &'static HttpRequestPool,
+pub struct HttpRequestInner {
+    pub head: Message<RequestHead>,
+    pub path: Path<Url>,
+    pub payload: Payload,
+    pub app_data: Rc<Extensions>,
+    pub rmap: Rc<ResourceMap>,
+    pub config: AppConfig,
+    pub pool: &'static HttpRequestPool,
 }
 
 impl HttpRequest {
     #[inline]
-    pub(crate) fn new(
+    pub fn new(
         path: Path<Url>,
         head: Message<RequestHead>,
         payload: Payload,
@@ -311,17 +311,17 @@ impl fmt::Debug for HttpRequest {
 }
 
 /// Request's objects pool
-pub(crate) struct HttpRequestPool(RefCell<Vec<Rc<HttpRequestInner>>>);
+pub struct HttpRequestPool(RefCell<Vec<Rc<HttpRequestInner>>>);
 
 impl HttpRequestPool {
-    pub(crate) fn create() -> &'static HttpRequestPool {
+    pub fn create() -> &'static HttpRequestPool {
         let pool = HttpRequestPool(RefCell::new(Vec::with_capacity(128)));
         Box::leak(Box::new(pool))
     }
 
     /// Get message from the pool
     #[inline]
-    pub(crate) fn get_request(&self) -> Option<HttpRequest> {
+    pub fn get_request(&self) -> Option<HttpRequest> {
         if let Some(inner) = self.0.borrow_mut().pop() {
             Some(HttpRequest(inner))
         } else {
@@ -329,7 +329,7 @@ impl HttpRequestPool {
         }
     }
 
-    pub(crate) fn clear(&self) {
+    pub fn clear(&self) {
         self.0.borrow_mut().clear()
     }
 }

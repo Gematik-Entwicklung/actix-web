@@ -57,7 +57,7 @@ pub struct ServiceRequest(HttpRequest);
 
 impl ServiceRequest {
     /// Construct service request
-    pub(crate) fn new(req: HttpRequest) -> Self {
+    pub fn new(req: HttpRequest) -> Self {
         ServiceRequest(req)
     }
 
