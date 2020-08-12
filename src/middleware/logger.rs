@@ -14,7 +14,6 @@ use bytes::Bytes;
 use futures::future::{ok, Ready};
 use log::debug;
 use regex::Regex;
-use time;
 
 use crate::dev::{BodySize, MessageBody, ResponseBody};
 use crate::error::{Error, Result};

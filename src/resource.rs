@@ -649,11 +649,9 @@ mod tests {
     #[actix_rt::test]
     async fn test_to() {
         let mut srv =
-            init_service(App::new().service(web::resource("/test").to(|| {
-                async {
-                    delay_for(Duration::from_millis(100)).await;
-                    Ok::<_, Error>(HttpResponse::Ok())
-                }
+            init_service(App::new().service(web::resource("/test").to(|| async {
+                delay_for(Duration::from_millis(100)).await;
+                Ok::<_, Error>(HttpResponse::Ok())
             })))
             .await;
         let req = TestRequest::with_uri("/test").to_request();

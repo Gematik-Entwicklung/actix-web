@@ -107,11 +107,9 @@ async fn test_form() {
 #[actix_rt::test]
 async fn test_timeout() {
     let srv = test::start(|| {
-        App::new().service(web::resource("/").route(web::to(|| {
-            async {
-                actix_rt::time::delay_for(Duration::from_millis(200)).await;
-                Ok::<_, Error>(HttpResponse::Ok().body(STR))
-            }
+        App::new().service(web::resource("/").route(web::to(|| async {
+            actix_rt::time::delay_for(Duration::from_millis(200)).await;
+            Ok::<_, Error>(HttpResponse::Ok().body(STR))
         })))
     });
 
@@ -137,11 +135,9 @@ async fn test_timeout() {
 #[actix_rt::test]
 async fn test_timeout_override() {
     let srv = test::start(|| {
-        App::new().service(web::resource("/").route(web::to(|| {
-            async {
-                actix_rt::time::delay_for(Duration::from_millis(200)).await;
-                Ok::<_, Error>(HttpResponse::Ok().body(STR))
-            }
+        App::new().service(web::resource("/").route(web::to(|| async {
+            actix_rt::time::delay_for(Duration::from_millis(200)).await;
+            Ok::<_, Error>(HttpResponse::Ok().body(STR))
         })))
     });
 

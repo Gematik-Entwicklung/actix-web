@@ -749,14 +749,12 @@ mod tests {
                 )
                 .secure(false)
                 .name(COOKIE_NAME))))
-                .service(web::resource("/").to(|id: Identity| {
-                    async move {
-                        let identity = id.identity();
-                        if identity.is_none() {
-                            id.remember(COOKIE_LOGIN.to_string())
-                        }
-                        web::Json(identity)
+                .service(web::resource("/").to(|id: Identity| async move {
+                    let identity = id.identity();
+                    if identity.is_none() {
+                        id.remember(COOKIE_LOGIN.to_string())
                     }
+                    web::Json(identity)
                 })),
         )
         .await

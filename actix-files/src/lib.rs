@@ -1140,12 +1140,10 @@ mod tests {
     #[actix_rt::test]
     async fn test_named_file_content_encoding() {
         let mut srv = test::init_service(App::new().wrap(Compress::default()).service(
-            web::resource("/").to(|| {
-                async {
-                    NamedFile::open("Cargo.toml")
-                        .unwrap()
-                        .set_content_encoding(header::ContentEncoding::Identity)
-                }
+            web::resource("/").to(|| async {
+                NamedFile::open("Cargo.toml")
+                    .unwrap()
+                    .set_content_encoding(header::ContentEncoding::Identity)
             }),
         ))
         .await;
@@ -1162,12 +1160,10 @@ mod tests {
     #[actix_rt::test]
     async fn test_named_file_content_encoding_gzip() {
         let mut srv = test::init_service(App::new().wrap(Compress::default()).service(
-            web::resource("/").to(|| {
-                async {
-                    NamedFile::open("Cargo.toml")
-                        .unwrap()
-                        .set_content_encoding(header::ContentEncoding::Gzip)
-                }
+            web::resource("/").to(|| async {
+                NamedFile::open("Cargo.toml")
+                    .unwrap()
+                    .set_content_encoding(header::ContentEncoding::Gzip)
             }),
         ))
         .await;

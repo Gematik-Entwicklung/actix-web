@@ -825,11 +825,9 @@ mod tests {
     async fn test_scope_variable_segment() {
         let mut srv =
             init_service(App::new().service(web::scope("/ab-{project}").service(
-                web::resource("/path1").to(|r: HttpRequest| {
-                    async move {
-                        HttpResponse::Ok()
-                            .body(format!("project: {}", &r.match_info()["project"]))
-                    }
+                web::resource("/path1").to(|r: HttpRequest| async move {
+                    HttpResponse::Ok()
+                        .body(format!("project: {}", &r.match_info()["project"]))
                 }),
             )))
             .await;
@@ -937,11 +935,9 @@ mod tests {
     async fn test_nested_scope_with_variable_segment() {
         let mut srv = init_service(App::new().service(web::scope("/app").service(
             web::scope("/{project_id}").service(web::resource("/path1").to(
-                |r: HttpRequest| {
-                    async move {
-                        HttpResponse::Created()
-                            .body(format!("project: {}", &r.match_info()["project_id"]))
-                    }
+                |r: HttpRequest| async move {
+                    HttpResponse::Created()
+                        .body(format!("project: {}", &r.match_info()["project_id"]))
                 },
             )),
         )))
@@ -964,14 +960,12 @@ mod tests {
     async fn test_nested2_scope_with_variable_segment() {
         let mut srv = init_service(App::new().service(web::scope("/app").service(
             web::scope("/{project}").service(web::scope("/{id}").service(
-                web::resource("/path1").to(|r: HttpRequest| {
-                    async move {
-                        HttpResponse::Created().body(format!(
-                            "project: {} - {}",
-                            &r.match_info()["project"],
-                            &r.match_info()["id"],
-                        ))
-                    }
+                web::resource("/path1").to(|r: HttpRequest| async move {
+                    HttpResponse::Created().body(format!(
+                        "project: {} - {}",
+                        &r.match_info()["project"],
+                        &r.match_info()["id"],
+                    ))
                 }),
             )),
         )))
@@ -1177,15 +1171,11 @@ mod tests {
                     );
                     s.route(
                         "/",
-                        web::get().to(|req: HttpRequest| {
-                            async move {
-                                HttpResponse::Ok().body(format!(
-                                    "{}",
-                                    req.url_for("youtube", &["xxxxxx"])
-                                        .unwrap()
-                                        .as_str()
-                                ))
-                            }
+                        web::get().to(|req: HttpRequest| async move {
+                            HttpResponse::Ok().body(format!(
+                                "{}",
+                                req.url_for("youtube", &["xxxxxx"]).unwrap().as_str()
+                            ))
                         }),
                     );
                 }));
@@ -1203,11 +1193,9 @@ mod tests {
     async fn test_url_for_nested() {
         let mut srv = init_service(App::new().service(web::scope("/a").service(
             web::scope("/b").service(web::resource("/c/{stuff}").name("c").route(
-                web::get().to(|req: HttpRequest| {
-                    async move {
-                        HttpResponse::Ok()
-                            .body(format!("{}", req.url_for("c", &["12345"]).unwrap()))
-                    }
+                web::get().to(|req: HttpRequest| async move {
+                    HttpResponse::Ok()
+                        .body(format!("{}", req.url_for("c", &["12345"]).unwrap()))
                 }),
             )),
         )))

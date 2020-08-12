@@ -23,7 +23,6 @@ use futures::stream::{Stream, StreamExt};
 use net2::TcpBuilder;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json;
 
 pub use actix_http::test::TestBuffer;
 
@@ -1052,8 +1051,8 @@ mod tests {
     #[actix_rt::test]
     async fn test_response_json() {
         let mut app = init_service(App::new().service(web::resource("/people").route(
-            web::post().to(|person: web::Json<Person>| {
-                async { HttpResponse::Ok().json(person.into_inner()) }
+            web::post().to(|person: web::Json<Person>| async {
+                HttpResponse::Ok().json(person.into_inner())
             }),
         )))
         .await;
@@ -1073,8 +1072,8 @@ mod tests {
     #[actix_rt::test]
     async fn test_request_response_form() {
         let mut app = init_service(App::new().service(web::resource("/people").route(
-            web::post().to(|person: web::Form<Person>| {
-                async { HttpResponse::Ok().json(person.into_inner()) }
+            web::post().to(|person: web::Form<Person>| async {
+                HttpResponse::Ok().json(person.into_inner())
             }),
         )))
         .await;
@@ -1099,8 +1098,8 @@ mod tests {
     #[actix_rt::test]
     async fn test_request_response_json() {
         let mut app = init_service(App::new().service(web::resource("/people").route(
-            web::post().to(|person: web::Json<Person>| {
-                async { HttpResponse::Ok().json(person.into_inner()) }
+            web::post().to(|person: web::Json<Person>| async {
+                HttpResponse::Ok().json(person.into_inner())
             }),
         )))
         .await;
