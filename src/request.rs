@@ -16,21 +16,21 @@ use crate::rmap::ResourceMap;
 
 #[derive(Clone)]
 /// An HTTP Request
-pub struct HttpRequest(pub(crate) Rc<HttpRequestInner>);
+pub struct HttpRequest(pub Rc<HttpRequestInner>);
 
-pub(crate) struct HttpRequestInner {
-    pub(crate) head: Message<RequestHead>,
-    pub(crate) path: Path<Url>,
-    pub(crate) payload: Payload,
-    pub(crate) app_data: TinyVec<[Rc<Extensions>; 4]>,
-    rmap: Rc<ResourceMap>,
-    config: AppConfig,
-    pool: &'static HttpRequestPool,
+pub struct HttpRequestInner {
+    pub head: Message<RequestHead>,
+    pub path: Path<Url>,
+    pub payload: Payload,
+    pub app_data: TinyVec<[Rc<Extensions>; 4]>,
+    pub rmap: Rc<ResourceMap>,
+    pub config: AppConfig,
+    pub pool: &'static HttpRequestPool,
 }
 
 impl HttpRequest {
     #[inline]
-    pub(crate) fn new(
+    pub fn new(
         path: Path<Url>,
         head: Message<RequestHead>,
         payload: Payload,
@@ -351,7 +351,7 @@ impl fmt::Debug for HttpRequest {
 /// in `<AppInitService as Service>::call` when there are available objects in the list.
 ///
 /// The pool's initial capacity is 128 items.
-pub(crate) struct HttpRequestPool(RefCell<Vec<Rc<HttpRequestInner>>>);
+pub struct HttpRequestPool(RefCell<Vec<Rc<HttpRequestInner>>>);
 
 impl HttpRequestPool {
     /// Allocates a slab of memory for pool use.
@@ -362,7 +362,7 @@ impl HttpRequestPool {
 
     /// Re-use a previously allocated (but now completed/discarded) HttpRequest object.
     #[inline]
-    pub(crate) fn get_request(&self) -> Option<HttpRequest> {
+    pub fn get_request(&self) -> Option<HttpRequest> {
         self.0.borrow_mut().pop().map(HttpRequest)
     }
 
